@@ -9,8 +9,6 @@ public class CrawlConfig {
 	
 	private int connectTimeOut;
 	private int readTimeOut;
-	private int keepAliveTime;
-	private int maxConnectionTimes;
 	private int connectRequestTimeOut;
 	private String defaultChartset;
 	
@@ -28,7 +26,6 @@ public class CrawlConfig {
 		connectTimeOut = 3000;
 		readTimeOut = 3000;
 		connectRequestTimeOut = -1;
-		maxConnectionTimes = 3;
 		defaultChartset = "ISO-8859-1";
 		
 		usePool = true;
@@ -36,12 +33,7 @@ public class CrawlConfig {
 		defaultMaxPerRouter = 4;
 		
 		userProxy = false;
-		keepAliveTime = -1;
 		maxIdleTime = -1;
-	}
-
-	public int getKeepAliveTime() {
-		return keepAliveTime;
 	}
 
 	public int getMaxIdleTime() {
@@ -58,10 +50,6 @@ public class CrawlConfig {
 
 	public int getProxyPort() {
 		return proxyPort;
-	}
-
-	public void setKeepAliveTime(int keepAliveTime) {
-		this.keepAliveTime = keepAliveTime;
 	}
 
 	public void setMaxIdleTime(int maxIdleTime) {
@@ -88,10 +76,6 @@ public class CrawlConfig {
 		return readTimeOut;
 	}
 
-	public int getMaxConnectionTimes() {
-		return maxConnectionTimes;
-	}
-
 	public String getDefaultChartset() {
 		return defaultChartset;
 	}
@@ -116,10 +100,6 @@ public class CrawlConfig {
 		this.readTimeOut = readTimeOut;
 	}
 
-	public void setMaxConnectionTimes(int maxConnectionTimes) {
-		this.maxConnectionTimes = maxConnectionTimes;
-	}
-
 	public void setDefaultChartset(String defaultChartset) {
 		this.defaultChartset = defaultChartset;
 	}
@@ -142,5 +122,16 @@ public class CrawlConfig {
 
 	public void setConnectRequestTimeOut(int connectRequestTimeOut) {
 		this.connectRequestTimeOut = connectRequestTimeOut;
+	}
+	
+	@Override
+	public String toString() {
+		return "CrawlConfig [connectTimeOut=" + connectTimeOut
+				+ ", readTimeOut=" + readTimeOut + ", connectRequestTimeOut="
+				+ connectRequestTimeOut + ", defaultChartset="
+				+ defaultChartset + ", usePool=" + usePool + ", maxPoolSize="
+				+ maxPoolSize + ", defaultMaxPerRouter=" + defaultMaxPerRouter
+				+ ", maxIdleTime=" + maxIdleTime + ", userProxy=" + userProxy
+				+ ", proxyHost=" + proxyHost + ", proxyPort=" + proxyPort + "]";
 	}
 }

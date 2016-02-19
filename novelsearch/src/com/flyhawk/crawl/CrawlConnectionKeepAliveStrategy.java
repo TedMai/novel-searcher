@@ -19,8 +19,8 @@ public class CrawlConnectionKeepAliveStrategy implements ConnectionKeepAliveStra
 
 	private int keepAliveTime;
 	
-	public CrawlConnectionKeepAliveStrategy(int keepAliveTime){
-		this.keepAliveTime = keepAliveTime;
+	public CrawlConnectionKeepAliveStrategy(){
+		this.keepAliveTime = -1;
 	}
 	@Override
 	public long getKeepAliveDuration(HttpResponse response, HttpContext context) {
@@ -39,6 +39,13 @@ public class CrawlConnectionKeepAliveStrategy implements ConnectionKeepAliveStra
             }
         }
         return keepAliveTime;
+	}
+	
+	public int getKeepAliveTime() {
+		return keepAliveTime;
+	}
+	public void setKeepAliveTime(int keepAliveTime) {
+		this.keepAliveTime = keepAliveTime;
 	}
 
 }

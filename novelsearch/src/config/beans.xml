@@ -4,6 +4,35 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
 	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-	<bean id="hello" class="com.flyhawk.test.HelloWorld"></bean>
-
+	<!-- httpclient 参数配置 -->
+	<bean id="crawlConfig" class="com.flyhawk.crawl.CrawlConfig">
+		<property name="connectTimeOut"><value>3000</value></property>
+		<property name="readTimeOut"><value>3000</value></property>
+		<property name="connectRequestTimeOut"><value>-1</value></property>
+		<property name="defaultChartset"><value>ISO-8859-1</value></property>
+		<property name="usePool"><value>true</value></property>
+		<property name="maxPoolSize"><value>20</value></property>
+		<property name="defaultMaxPerRouter"><value>10</value></property>
+		<property name="maxIdleTime"><value>180000</value></property>
+		<property name="userProxy"><value>false</value></property>
+		<property name="proxyHost"><value>10.0.2.24</value></property>
+		<property name="proxyPort"><value>8080</value></property>
+	</bean>
+	
+	<bean id="httpRequestRetryHandler" class="com.flyhawk.crawl.CrawlHttpRequestRetryHandler">
+		<property name="maxConnectionTimes"><value>3</value></property>
+	</bean>
+	
+	<bean id="crawlConnectionKeepAliveStrategy" class="com.flyhawk.crawl.CrawlConnectionKeepAliveStrategy">
+		<property name="keepAliveTime"><value>5000</value></property>
+	</bean>
+	
+	<bean id="crawlConnection" class="com.flyhawk.crawl.CrawlConnection">
+		<property name="crawlConfig"><ref bean="crawlConfig"/></property>
+		<property name="httpRequestRetryHandler"><ref bean="httpRequestRetryHandler" /></property>
+		<property name="connectionKeepAliveStrategy"><ref bean="crawlConnectionKeepAliveStrategy" /></property>
+	</bean>
+	
+	<bean id="crawlEngine" class="com.flyhawk.crawl.CrawlEngine" parent="crawlConnection" init-method="init" destroy-method="shutdown"></bean>
+	
 </beans>

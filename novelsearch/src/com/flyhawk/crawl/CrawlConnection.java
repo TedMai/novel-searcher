@@ -2,6 +2,8 @@ package com.flyhawk.crawl;
 
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpHost;
 import org.apache.http.client.HttpRequestRetryHandler;
 import org.apache.http.client.config.RequestConfig;
@@ -13,7 +15,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 
-public class CrawlConnction {
+public class CrawlConnection {
 	
 	private CloseableHttpClient httpclient;
 	private HttpClientConnectionManager connMrg;
@@ -21,20 +23,25 @@ public class CrawlConnction {
 	private HttpRequestRetryHandler httpRequestRetryHandler;
 	private CrawlConfig crawlConfig;
 	
-	public CrawlConnction(){
-		init();
+	private static final Log logger = LogFactory.getLog(CrawlConnection.class);
+	
+	public CrawlConnection(){
 	}
 	
-	private void init(){
+	public void init(){
 		
+		logger.info("initialing http connection start......");
+		logger.info("use config " + crawlConfig);
 		if(crawlConfig.isUsePool()){
 			connMrg = new PoolingHttpClientConnectionManager();
 			PoolingHttpClientConnectionManager cm = (PoolingHttpClientConnectionManager)connMrg;
 			cm.setMaxTotal(crawlConfig.getMaxPoolSize());
 			cm.setDefaultMaxPerRoute(crawlConfig.getDefaultMaxPerRouter());
 			connMrg = cm;
+			logger.info("Using PoolingHttpClientConnectionManager [ Poolsize= " + crawlConfig.getMaxPoolSize()+",DefaultMaxPerRoute="+crawlConfig.getDefaultMaxPerRouter()+"]");
 		}else{
 			connMrg = new BasicHttpClientConnectionManager();
+			logger.info("Using BasicHttpClientConnectionManager.");
 		}
 		
         HttpClientBuilder httpClientBuilder = HttpClients.custom();
@@ -42,11 +49,11 @@ public class CrawlConnction {
         httpClientBuilder.evictExpiredConnections();
         httpClientBuilder.evictIdleConnections(crawlConfig.getMaxIdleTime(), TimeUnit.MILLISECONDS);
         
-        if(crawlConfig.getKeepAliveTime() !=-1 && connectionKeepAliveStrategy !=null ){
+        if(connectionKeepAliveStrategy !=null ){
 			httpClientBuilder.setKeepAliveStrategy(connectionKeepAliveStrategy);
 		}
         
-        if(crawlConfig.getMaxConnectionTimes() !=-1 && httpRequestRetryHandler !=null ){
+        if(httpRequestRetryHandler !=null ){
         	 httpClientBuilder.setRetryHandler(httpRequestRetryHandler);
         }
         
@@ -63,6 +70,11 @@ public class CrawlConnction {
         httpClientBuilder.setDefaultRequestConfig(requestConfig);
         httpclient = httpClientBuilder.build();
         
+        logger.info("initialing http connection end.");
+	}
+	
+	public void shutdown(){
+		connMrg.shutdown();
 	}
 	
 	public CloseableHttpClient getHttpClient(){

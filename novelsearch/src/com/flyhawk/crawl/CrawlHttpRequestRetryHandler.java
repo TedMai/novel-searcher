@@ -9,6 +9,10 @@ public class CrawlHttpRequestRetryHandler implements HttpRequestRetryHandler{
 
 	private int maxConnectionTimes;
 	
+	public CrawlHttpRequestRetryHandler(){
+		maxConnectionTimes = -1;
+	}
+	
 	@Override
 	public boolean retryRequest(IOException ioexception, int i,
 			HttpContext httpcontext) {
