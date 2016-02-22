@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -17,6 +18,9 @@ import org.apache.http.impl.client.CloseableHttpClient;
  *
  */
 public class CrawlEngine extends CrawlConnection{
+	
+	private ResponseHandler<String> responseHandler;
+	private HashMap<String,String> requestHeaders;
 	
 	/*
 	 * 带参数的get方法请求
@@ -39,18 +43,38 @@ public class CrawlEngine extends CrawlConnection{
 	 */
 	public boolean readPageByGet(String url){
 		HttpGet httpget = new HttpGet(url);
+		if(requestHeaders!=null && requestHeaders.size() !=0){
+			Iterator<Entry<String,String>> it = requestHeaders.entrySet().iterator();
+			while(it.hasNext()){
+				Entry<String,String> entry = it.next();
+				httpget.addHeader(entry.getKey(), entry.getValue());
+			}
+		}
 		CloseableHttpClient httpclient = getHttpClient();
 		try {
-			httpclient.execute(httpget);
+			String result = httpclient.execute(httpget,responseHandler);
+			System.out.println(result);
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		}finally{
+			try {
+				httpclient.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		return false;
 	}
 	
-	private boolean readPageByGet(){
-		return false;
+	
+	
+	public ResponseHandler<String> getResponseHandler() {
+		return responseHandler;
+	}
+
+	public void setResponseHandler(ResponseHandler<String> responseHandler) {
+		this.responseHandler = responseHandler;
 	}
 }

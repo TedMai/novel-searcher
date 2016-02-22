@@ -14,9 +14,9 @@
 		<property name="maxPoolSize"><value>20</value></property>
 		<property name="defaultMaxPerRouter"><value>10</value></property>
 		<property name="maxIdleTime"><value>180000</value></property>
-		<property name="userProxy"><value>false</value></property>
-		<property name="proxyHost"><value>10.0.2.24</value></property>
-		<property name="proxyPort"><value>8080</value></property>
+		<property name="userProxy"><value>true</value></property>
+		<property name="proxyHost"><value>192.111.7.77</value></property>
+		<property name="proxyPort"><value>10086</value></property>
 	</bean>
 	
 	<bean id="httpRequestRetryHandler" class="com.flyhawk.crawl.CrawlHttpRequestRetryHandler">
@@ -33,6 +33,9 @@
 		<property name="connectionKeepAliveStrategy"><ref bean="crawlConnectionKeepAliveStrategy" /></property>
 	</bean>
 	
-	<bean id="crawlEngine" class="com.flyhawk.crawl.CrawlEngine" parent="crawlConnection" init-method="init" destroy-method="shutdown"></bean>
+	<bean id="stringResponseHandler" class="com.flyhawk.crawl.CrawlStringResponseHandler"></bean>
+	<bean id="crawlEngine" class="com.flyhawk.crawl.CrawlEngine" parent="crawlConnection" init-method="init" destroy-method="shutdown">
+		<property name="responseHandler"><ref bean="stringResponseHandler"/></property>
+	</bean>
 	
 </beans>
