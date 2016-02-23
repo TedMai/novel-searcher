@@ -38,4 +38,21 @@
 		<property name="responseHandler"><ref bean="stringResponseHandler"/></property>
 	</bean>
 	
+	<bean id="updateList" class="com.flyhawk.crawl.NovelUpdateList">
+		<property name="engine"><ref bean="crawlEngine"></ref></property>
+		<!-- <property name="rootPath" value="http://book.zongheng.com/store/c0/c0/b9/u0/p1/v0/s9/t0/ALL.html"></property> -->
+		<property name="rootPath" value="http://book.zongheng.com/book/516129.html"></property>
+		<property name="regExpStr"><value>&lt;a class=&quot;fs14&quot; href=&quot;(.*?)&quot;</value></property>
+		<property name="matchedNum"><value>1</value></property>
+		<property name="separator"><value>@#@</value></property>
+		<property name="exclusiveFlag"><value>true</value></property>
+		<property name="exclusiveStr"><value>baidu</value></property>
+		<property name="requestHeaders">
+			<map>
+				<entry key="User-Agent" value="Mozilla/5.0 (Windows NT 6.1; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0" />
+				<entry key="Accept" value="text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" />
+				<entry key="Host" value="book.zongheng.com" />
+			</map>
+		</property>
+	</bean>
 </beans>

@@ -36,9 +36,13 @@ public class CrawlStringResponseHandler implements ResponseHandler<String>{
 		ContentType contentType = ContentType.getOrDefault(httpEntity);
 	    Charset charset = contentType.getCharset();
 	    BufferedReader reader = new BufferedReader(new InputStreamReader(httpEntity.getContent(), charset));
-	    String resonseString = reader.readLine();
-	    logger.info(resonseString);
-		return resonseString;
+	    String responseString = "";
+	    StringBuffer sb = new StringBuffer();
+	    while((responseString = reader.readLine())!=null){
+	    	sb.append(responseString);
+	    }
+	    reader.close();
+		return sb.toString();
 	}
 
 }

@@ -25,7 +25,7 @@ public class CrawlEngine extends CrawlConnection{
 	/*
 	 * 带参数的get方法请求
 	 */
-	public boolean readPageByGet(String url, HashMap<String,String> params) throws URISyntaxException{
+	public String readPageByGet(String url, HashMap<String,String> params) throws URISyntaxException{
 		if( params == null || params.size() == 0){
 			return readPageByGet( url);
 		}
@@ -41,7 +41,8 @@ public class CrawlEngine extends CrawlConnection{
 	/*
 	 * 不带参数的get方法请求
 	 */
-	public boolean readPageByGet(String url){
+	public String readPageByGet(String url){
+		String result = "";
 		HttpGet httpget = new HttpGet(url);
 		if(requestHeaders!=null && requestHeaders.size() !=0){
 			Iterator<Entry<String,String>> it = requestHeaders.entrySet().iterator();
@@ -52,7 +53,7 @@ public class CrawlEngine extends CrawlConnection{
 		}
 		CloseableHttpClient httpclient = getHttpClient();
 		try {
-			String result = httpclient.execute(httpget,responseHandler);
+			result = httpclient.execute(httpget,responseHandler);
 			System.out.println(result);
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
@@ -65,7 +66,7 @@ public class CrawlEngine extends CrawlConnection{
 				e.printStackTrace();
 			}
 		}
-		return false;
+		return result;
 	}
 	
 	
@@ -76,5 +77,13 @@ public class CrawlEngine extends CrawlConnection{
 
 	public void setResponseHandler(ResponseHandler<String> responseHandler) {
 		this.responseHandler = responseHandler;
+	}
+	
+	public HashMap<String, String> getRequestHeaders() {
+		return requestHeaders;
+	}
+
+	public void setRequestHeaders(HashMap<String, String> requestHeaders) {
+		this.requestHeaders = requestHeaders;
 	}
 }
