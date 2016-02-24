@@ -1,5 +1,9 @@
 package com.flyhawk.util;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,7 +51,28 @@ public class RegExpUtil {
 		Pattern pattern = Pattern.compile(regExpStr, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 		Matcher matcher = pattern.matcher(srcStr);
 		if(matcher.find()){
-			result = matcher.group(matchNum).trim(); 
+			result = matcher.group(matchNum).trim();
+		}
+		return result;
+	}
+	
+	public static List<HashMap<String,String>> getMutilMatchedFields(String srcStr,String regExpStr, int fieldNums, String ... fieldNames){
+		ArrayList<HashMap<String,String>> result = null;
+		if(srcStr == null || regExpStr == null || fieldNums < 1 || srcStr.isEmpty() ){
+			return result;
+		}
+		Pattern pattern = Pattern.compile(regExpStr, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+		Matcher matcher = pattern.matcher(srcStr);
+		int loop = 0;
+		result = new ArrayList<HashMap<String,String>>();
+		HashMap<String,String> data = null;
+		while(matcher.find()){
+			data = new HashMap<String,String>();
+			for( ; loop <fieldNums && loop < fieldNames.length; loop++){
+				data.put(fieldNames[loop], matcher.group(loop+1).trim());
+			}
+			result.add(data);
+			loop = 0;
 		}
 		return result;
 	}

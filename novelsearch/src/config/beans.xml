@@ -36,23 +36,70 @@
 	<bean id="stringResponseHandler" class="com.flyhawk.crawl.CrawlStringResponseHandler"></bean>
 	<bean id="crawlEngine" class="com.flyhawk.crawl.CrawlEngine" parent="crawlConnection" init-method="init" destroy-method="shutdown">
 		<property name="responseHandler"><ref bean="stringResponseHandler"/></property>
-	</bean>
-	
-	<bean id="updateList" class="com.flyhawk.crawl.NovelUpdateList">
-		<property name="engine"><ref bean="crawlEngine"></ref></property>
-		<!-- <property name="rootPath" value="http://book.zongheng.com/store/c0/c0/b9/u0/p1/v0/s9/t0/ALL.html"></property> -->
-		<property name="rootPath" value="http://book.zongheng.com/book/516129.html"></property>
-		<property name="regExpStr"><value>&lt;a class=&quot;fs14&quot; href=&quot;(.*?)&quot;</value></property>
-		<property name="matchedNum"><value>1</value></property>
-		<property name="separator"><value>@#@</value></property>
-		<property name="exclusiveFlag"><value>true</value></property>
-		<property name="exclusiveStr"><value>baidu</value></property>
 		<property name="requestHeaders">
 			<map>
 				<entry key="User-Agent" value="Mozilla/5.0 (Windows NT 6.1; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0" />
 				<entry key="Accept" value="text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" />
 				<entry key="Host" value="book.zongheng.com" />
 			</map>
+		</property>
+	</bean>
+	
+	<bean id="novelUpdateList" class="com.flyhawk.crawl.NovelUpdateList">
+		<property name="engine"><ref bean="crawlEngine"></ref></property>
+		<property name="rootPath" value="http://book.zongheng.com/store/c0/c0/b9/u0/p1/v0/s9/t0/ALL.html"></property>
+		<property name="regExpStr"><value>&lt;a class=&quot;fs14&quot; href=&quot;(.*?)&quot;</value></property>
+		<property name="matchedNum"><value>1</value></property>
+		<property name="separator"><value>@#@</value></property>
+		<property name="exclusiveFlag"><value>true</value></property>
+		<property name="exclusiveStr"><value>baidu</value></property>
+	</bean>
+	
+	<bean id="novelInfo" class="com.flyhawk.crawl.NovelInfo">
+		<property name="engine"><ref bean="crawlEngine"></ref></property>
+		<property name="nameRegexpStr">
+			<value><![CDATA[<meta name="og:novel:book_name" content="(.*?)"/>]]></value>
+		</property>
+		<property name="authorRegexpStr">
+			<value><![CDATA[<meta name="og:novel:author" content="(.*?)"]]></value>
+		</property>
+		<property name="descRegexpStr">
+			<value><![CDATA[<meta property="og:description" content="(.*?)"]]></value>
+		</property>
+		<property name="typeRegexpStr">
+			<value><![CDATA[<meta name="og:novel:category" content="(.*?)"]]></value>
+		</property>
+		<property name="lastchapterRegexpStr">
+			<value><![CDATA[<a class="chap" href="(.*?)">正文]]></value>
+		</property>
+		<property name="chapterlisturlRegexpStr">
+			<value><![CDATA[<meta name="og:novel:read_url" content="(.*?)"/>]]></value>
+		</property>
+		<property name="wordcountRegexpStr">
+			<value><![CDATA[<span title=".*字">(.*?)</span>]]></value>
+		</property>
+		<property name="keywordsRegexpStr">
+			<value><![CDATA[<div class="keyword">(.*?)</div>]]></value>
+		</property>
+	</bean>
+	
+	<bean id="novelChapterList" class="com.flyhawk.crawl.NovelChapterList" >
+		<property name="engine"><ref bean="crawlEngine"></ref></property>
+		<property name="chapterRegexpStr">
+			<value><![CDATA[<td class="chapterBean" chapterId="(.*?)" chapterName="(.*?)".*? wordNum="(.*?)" updateTime="(.*?)"><a href="(.*?)"]]></value>
+		</property>
+	</bean>
+	
+	<bean id="novelChapterDetail" class="com.flyhawk.crawl.NovelChapterDetail">
+		<property name="crawlEngine"><ref bean="crawlEngine"></ref></property>
+		<property name="titleRegexpStr">
+			<value><![CDATA[<h1><em itemprop="headline">(.*?)</em></h1>]]></value>
+		</property>
+		<property name="wordcountRegexpStr">
+			<value><![CDATA[<em><span itemprop="wordCount">(.*?)</span></em>]]></value>
+		</property>
+		<property name="contentRegexpStr">
+			<value><![CDATA[<div id="chapterContent" class="content" itemprop="acticleBody">(.*?)</div>]]></value>
 		</property>
 	</bean>
 </beans>

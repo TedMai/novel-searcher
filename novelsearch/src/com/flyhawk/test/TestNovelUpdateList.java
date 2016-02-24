@@ -8,30 +8,26 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.flyhawk.crawl.CrawlEngine;
 import com.flyhawk.crawl.NovelUpdateList;
 
-public class TestCrawlConnection {
-	
-	NovelUpdateList engine;
+public class TestNovelUpdateList {
+	NovelUpdateList novelUpdateList;
 	@Before
 	public void initCrawlEngine(){
 		System.setProperty("org.apache.commons.logging.diagnostics.dest", "STDOUT" );
 		ApplicationContext ctx = new ClassPathXmlApplicationContext("config/beans.xml");
-		engine = (NovelUpdateList)ctx.getBean("updateList");
+		novelUpdateList = (NovelUpdateList)ctx.getBean("novelUpdateList");
 		
 	}
 	
 	@Test
-	public void callSpringMethod(){
-		
-		List<String> urls = engine.getPageUrls();
-		if(urls == null || urls.isEmpty())
-			return ;
-		Iterator<String> it = urls.iterator();
-		while(it.hasNext()){
-			String url =it.next();
-			System.out.println(url);
+	public void testNovelUpdateList(){
+		List<String> urls = novelUpdateList.getPageUrls();
+		if(urls != null && !urls.isEmpty()){
+			Iterator<String> it = urls.iterator();
+			while(it.hasNext()){
+				System.out.println(it.next());
+			}
 		}
 	}
 }
