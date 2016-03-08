@@ -36,5 +36,5 @@ public class NovelDAOImpl implements NovelDAO {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
 }
+

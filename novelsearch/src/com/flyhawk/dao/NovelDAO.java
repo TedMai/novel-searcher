@@ -1,5 +1,6 @@
 package com.flyhawk.dao;
 
+
 import java.util.List;
 
 import com.flyhawk.bean.Novel;

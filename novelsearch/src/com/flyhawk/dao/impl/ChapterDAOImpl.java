@@ -1,5 +1,6 @@
 package com.flyhawk.dao.impl;
 
+
 import java.util.List;
 
 import com.flyhawk.bean.Chapter;
@@ -37,5 +38,4 @@ public class ChapterDAOImpl implements ChapterDAO {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
 }
